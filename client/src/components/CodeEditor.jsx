@@ -3,9 +3,9 @@ import { Editor } from "@monaco-editor/react";
 
 const CodeEditor = ({ language, setLanguage, code, setCode, runCode }) => {
   return (
-    <div className="flex flex-col h-[70vh]">
+    <div className="flex flex-col h-[85vh] w-[130vh]">
       {" "}
-      <div className="flex items-center justify-between bg-gray-800 px-4 py-2 border-b border-gray-700">
+      <div className="flex items-center justify-between bg-gray-800 px-4 py-2 ">
         <select
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
@@ -16,12 +16,17 @@ const CodeEditor = ({ language, setLanguage, code, setCode, runCode }) => {
           <option value="cpp">C++</option>
           <option value="java">Java</option>
         </select>
-        <button
-          onClick={runCode}
-          className="bg-green-500 px-4 py-2 rounded text-black font-bold hover:bg-green-600"
-        >
-          Run Code
-        </button>
+        <div>
+          <button className="px-4 py-2 mr-5  bg-blue-500 rounded text-white hover:bg-blue-600">
+            + Invite
+          </button>
+          <button
+            onClick={runCode}
+            className="bg-green-500 px-4 py-2 rounded text-black font-bold hover:bg-green-600"
+          >
+            Run Code
+          </button>
+        </div>
       </div>
       {/* Monaco Code Editor */}
       <div className="flex-1 bg-gray-800 p-4 overflow-auto">

@@ -1,20 +1,25 @@
 import React from "react";
 
-const Output = ({ output, loading }) => {
+const Output = ({ output, loading, clearOutput }) => {
   return (
-    <div className="bg-gray-800 border-t border-gray-700 p-4">
-      <h3 className="text-lg font-bold border-b border-gray-600 pb-2 mb-4">
-        Output
-      </h3>
+    <div className="bg-gray-800 h-[82vh] p-4 flex-1 overflow-hidden">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-bold pb-2">Output</h3>
+        {/* Clear Button */}
+        <button
+          className="px-4 py-2 mr-2  bg-red-500 rounded text-white hover:bg-red-600"
+          onClick={clearOutput}
+          disabled={loading} // Disable the button when loading
+        >
+          Clear
+        </button>
+      </div>
       <div
-        className="bg-zinc-900 p-4 rounded-lg text-white font-mono text-sm"
+        className="bg-zinc-900 p-4 text-white font-mono text-sm h-full overflow-y-auto scrollbar-hide"
         style={{
-          minHeight: "150px",
-          whiteSpace: "pre-wrap", // Preserve line breaks and white space
-          overflowY: "auto", // Allow scrolling when content overflows
+          whiteSpace: "pre-wrap",
         }}
       >
-        {/* Display the output or a loading message */}
         {loading ? "Loading..." : output || "Output will appear here..."}
       </div>
     </div>
