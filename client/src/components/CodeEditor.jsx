@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 
-const CodeEditor = ({ language, setLanguage, code, setCode, runCode }) => {
+const CodeEditor = ({
+  socketRef,
+  roomId,
+  language,
+  setLanguage,
+  code,
+  setCode,
+  runCode,
+}) => {
+  useEffect(() => {
+    if (!socketRef.current) return;
+
+  
+    socketRef.current.on("code-change", ({ newCode }) => {
+      setCode(newCode); 
+    });
+
+    return () => {
+      socketRef.current.off("code-change");
+    };
+  }, [socketRef]);
+
+  const handleCodeChange = (value) => {
+    setCode(value || "");
+
+    if (socketRef.current) {
+      socketRef.current.emit("code-change", {
+        roomId,
+        newCode: value || "",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-[85vh] w-[130vh]">
-      {" "}
-      <div className="flex items-center justify-between bg-gray-800 px-4 py-2 ">
+      <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
         <select
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
@@ -17,7 +48,7 @@ const CodeEditor = ({ language, setLanguage, code, setCode, runCode }) => {
           <option value="java">Java</option>
         </select>
         <div>
-          <button className="px-4 py-2 mr-5  bg-blue-500 rounded text-white hover:bg-blue-600">
+          <button className="px-4 py-2 mr-5 bg-blue-500 rounded text-white hover:bg-blue-600">
             + Invite
           </button>
           <button
@@ -31,11 +62,11 @@ const CodeEditor = ({ language, setLanguage, code, setCode, runCode }) => {
       {/* Monaco Code Editor */}
       <div className="flex-1 bg-gray-800 p-4 overflow-auto">
         <Editor
-          height="100%" // Monaco editor takes up full height of the container
+          height="100%"
           language={language}
           value={code}
           theme="vs-dark"
-          onChange={(value) => setCode(value || "")}
+          onChange={handleCodeChange}
           options={{
             fontSize: 16,
             wordWrap: "on",
