@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
+import toast from "react-hot-toast";
 
 const CodeEditor = ({
   socketRef,
@@ -13,9 +14,8 @@ const CodeEditor = ({
   useEffect(() => {
     if (!socketRef.current) return;
 
-  
     socketRef.current.on("code-change", ({ newCode }) => {
-      setCode(newCode); 
+      setCode(newCode);
     });
 
     return () => {
@@ -33,6 +33,18 @@ const CodeEditor = ({
       });
     }
   };
+  const handleCopy = () => {
+    if (roomId) {
+      navigator.clipboard
+        .writeText(roomId)
+        .then(() => {
+          toast.success("Room ID copied to clipboard!");
+        })
+        .catch((err) => {
+          toast.error("Failed to copy Room ID.");
+        });
+    }
+  };
 
   return (
     <div className="flex flex-col h-[85vh] w-[130vh]">
@@ -40,7 +52,7 @@ const CodeEditor = ({
         <select
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
-          className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600"
+          className="bg-gray-800 text-white px-3  py-1 rounded border border-gray-600"
         >
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
@@ -48,7 +60,10 @@ const CodeEditor = ({
           <option value="java">Java</option>
         </select>
         <div>
-          <button className="px-4 py-2 mr-5 bg-blue-500 rounded text-white hover:bg-blue-600">
+          <button
+            className="px-4 py-2 mr-5 bg-blue-500 rounded text-white hover:bg-blue-600"
+            onClick={handleCopy}
+          >
             + Invite
           </button>
           <button
