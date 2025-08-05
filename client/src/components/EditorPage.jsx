@@ -104,7 +104,7 @@ const EditorPage = () => {
       }
 
       const { data: submission } = await axios.post(
-        "http://localhost:5000/run",
+        "https://devcollab-1-p1pe.onrender.com/run",
         {
           source_code: code,
           language_id: languageId,
